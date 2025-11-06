@@ -1,17 +1,20 @@
 """
-Freya Load Test Harness
-=======================
+Mk.02 Multi-Rate Limit Tester
+=============================
 
-Freya is a parallel load testing utility inspired by the Hermes rate tester.
-It can generate sustained load against one or more HTTP endpoints using a
-weighted scenario definition and produces detailed summaries and optional logs.
+Mk.02 Multi-Rate Limit Tester is a parallel load testing utility inspired by the
+Hermes rate tester. It can generate sustained load against one or more HTTP
+endpoints using a weighted scenario definition and produces detailed summaries
+and optional logs.
 
 Two primary modes are supported:
 
-1. Run mode (`freya.py run ...`) executes a load test against real services.
-   Scenarios can be provided via CLI flags or a JSON file.
-2. Simulate mode (`freya.py simulate ...`) spins up a lightweight HTTP service
-   with configurable latency and error profiles for local experiments.
+1. Run mode (`Mk.02-Multi-Rate-Limit-Tester.py run ...`) executes a load test
+   against real services. Scenarios can be provided via CLI flags or a JSON
+   file.
+2. Simulate mode (`Mk.02-Multi-Rate-Limit-Tester.py simulate ...`) spins up a
+   lightweight HTTP service with configurable latency and error profiles for
+   local experiments.
 """
 
 from __future__ import annotations
@@ -466,12 +469,12 @@ class TargetDialog:
         return self.result
 
 
-class FreyaGUI:
+class Mk02MultiRateLimitTesterGUI:
     def __init__(self, root: tk.Tk):
         if tk is None or ttk is None:
             raise RuntimeError("tkinter를 사용할 수 없습니다.")
         self.root = root
-        self.root.title("Freya")
+        self.root.title("Mk.02 Multi-Rate Limit Tester")
         self.root.minsize(1024, 720)
 
         self.targets: List[TargetConfig] = []
@@ -624,7 +627,7 @@ class FreyaGUI:
         path = filedialog.asksaveasfilename(
             title="시나리오 저장",
             defaultextension=".json",
-            initialfile="freya-scenario.json",
+            initialfile="mk02-scenario.json",
         )
         if not path:
             return
@@ -825,7 +828,7 @@ class FreyaGUI:
         path = filedialog.asksaveasfilename(
             title="요약 저장",
             defaultextension=".json",
-            initialfile="freya-summary.json",
+            initialfile="mk02-summary.json",
         )
         if not path:
             return
@@ -842,7 +845,7 @@ class FreyaGUI:
         path = filedialog.asksaveasfilename(
             title="로그 저장",
             defaultextension=".log",
-            initialfile="freya-log.log",
+            initialfile="mk02-log.log",
         )
         if not path:
             return
@@ -862,7 +865,7 @@ def launch_gui() -> None:
     if tk is None or ttk is None:
         raise SystemExit("GUI 실행을 위해 tkinter가 필요합니다. (macOS의 경우 `brew install python-tk`)")
     root = tk.Tk()
-    FreyaGUI(root)
+    Mk02MultiRateLimitTesterGUI(root)
     root.mainloop()
 
 
@@ -961,7 +964,7 @@ async def start_simulation_server(config: SimulationConfig) -> None:
     site = web.TCPSite(runner, host=config.host, port=config.port)
     await site.start()
 
-    print(f"Freya 시뮬레이터 실행 중: http://{config.host}:{config.port}")
+    print(f"Mk.02 Multi-Rate Limit Tester 시뮬레이터 실행 중: http://{config.host}:{config.port}")
     for entry in config.routes:
         print(
             f"  {entry.method} {entry.path} -> status {entry.status} "
@@ -990,7 +993,7 @@ async def start_simulation_server(config: SimulationConfig) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Freya parallel load tester")
+    parser = argparse.ArgumentParser(description="Mk.02 Multi-Rate Limit Tester parallel load harness")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     run_parser = subparsers.add_parser("run", help="실제 엔드포인트에 부하 테스트 수행")
